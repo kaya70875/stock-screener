@@ -1,17 +1,4 @@
 from bs4 import BeautifulSoup
-import requests
-
-def createSession():
-    headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
-               'Accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-               'Accept-Language' : 'en-US,en;q=0.9,fr-FR;q=0.8,fr;q=0.7,tr;q=0.6'}
-    cookies = {'sessionid' : '9dkbdqrund5t80f8785llxc9u369fjyd;',
-               'sessionid_sign' : 'v2:zjpTijL+WMwysOpE4hGGeRxHHUlaOLI15fMjDyC8Srw=;'}
-    session = requests.Session()
-    session.headers.update(headers)
-    session.cookies.update(cookies)
-
-    return session
 
 def getArticleElements(links , session):
     articles = []

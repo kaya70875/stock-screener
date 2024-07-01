@@ -1,18 +1,27 @@
-from selenium import webdriver
-import chromedriver_autoinstaller
+from utils.get_news import GetNews
+from data.sentiment_analysis import Analysis
 
-from crawlers.handle_dynamicWeb import getDynamicElement
-from crawlers.get_articles import getArticleElements , createSession
-from sentiment_analysis import getResults
+def getArticles(pair_name):
+    news = GetNews(pair_name)
 
-chromedriver_autoinstaller.install()
-driver = webdriver.Chrome()
+    return news.fetchTW()
 
-links = getDynamicElement(driver , 'ARCLK')
+def getSentimentAnalysisResults(articles):
+    Sresults = []
+    for article in articles:
+        score = Analysis().sentimentAnalysis(input=article['text'])
+        
+        results = {'Header' : article['header'],
+                'Date' : article['date'],
+                'Label' : score}
 
-session = createSession()
-article = getArticleElements(links , session)
+        Sresults.append(results)
 
-# Sentiment Analysis #
-results = getResults(article)
-print(results)
+    return Sresults
+
+articles = getArticles(pair_name='AAPL')
+
+results = getSentimentAnalysisResults(articles=articles)
+
+for result in results:
+    print(f'Results : {result}')
