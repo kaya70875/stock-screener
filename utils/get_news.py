@@ -9,15 +9,17 @@ cookies = {'sessionid' : '9dkbdqrund5t80f8785llxc9u369fjyd;',
                 'sessionid_sign' : 'v2:zjpTijL+WMwysOpE4hGGeRxHHUlaOLI15fMjDyC8Srw=;'}
 
 class GetNews:
-    def __init__(self , pair):
+    def __init__(self , pairs):
         'FETCH FROM TWO DIFFIRENT SOURCES AND THEN ANALYSE IT.'
-        self.pair = pair
+        self.pairs = pairs
     def fetchTW(self):
+        articles = []
+        for pair in self.pairs:
+            links = getDynamicElement(pair)
 
-        links = getDynamicElement(self.pair)
-
-        session = QSession(headers=headers , cookies=cookies).createSession()
-        article = getArticleElements(links , session)
+            session = QSession(headers=headers , cookies=cookies).createSession()
+            article = getArticleElements(links , session)
             
-        return article
+            articles.append(article)
+        return articles
     
