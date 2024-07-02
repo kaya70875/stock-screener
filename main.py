@@ -1,10 +1,12 @@
-from utils.get_news import GetNews
-from data.sentiment_analysis import Analysis
+from crawlers.get_news import GetNews
+from analysis.sentiment_analysis import Analysis
 
-def getArticles(*pair_name):
+import threading
+
+def getArticles(pair_name , results):
     news = GetNews(pair_name)
-
-    return news.fetchTW()
+    articles = news.fetchTW(max_news=7)
+    results.append(articles)
 
 def getSentimentAnalysisResults(articles):
     Sresults = []
@@ -13,7 +15,9 @@ def getSentimentAnalysisResults(articles):
         for element in article:
             score = analysis.sentimentAnalysis(input=element['header'] + element['text'])
             
-            results = {'Header' : element['header'],
+            results = {
+                    'Company' : element['company'],
+                    'Header' : element['header'],
                     'Date' : element['date'],
                     'Label' : score}
 
@@ -21,9 +25,21 @@ def getSentimentAnalysisResults(articles):
 
     return Sresults
 
-articles = getArticles('AAPL' , 'ARCLK' , 'TSLA' , 'OYAKC')
+stocks = ['AAPL' , 'TSLA']
+threads = []
+thread_results = []
 
-results = getSentimentAnalysisResults(articles=articles)
+all_articles = []
+
+for symbol in stocks:
+    thread = threading.Thread(target=getArticles , args=(symbol, thread_results))
+    threads.append(thread)
+    thread.start()
+
+for thread in threads:
+    thread.join()
+
+results = getSentimentAnalysisResults(articles=thread_results)
 
 for result in results:
     print(f'Results : {result}')

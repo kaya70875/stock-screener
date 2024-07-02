@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-def getArticleElements(links , session):
+def getArticleElements(links , session , company):
     articles = []
 
     for link in links:
@@ -21,6 +21,7 @@ def getArticleElements(links , session):
         date = container_date.find('span').text
 
         article_data = {
+            'company' : company,
             'header' : header,
             'date' : date,
             'text' : all_text
