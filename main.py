@@ -8,8 +8,9 @@ def getArticles(pair_name):
 
 def getSentimentAnalysisResults(articles):
     Sresults = []
+    analysis = Analysis()
     for article in articles:
-        score = Analysis().sentimentAnalysis(input=article['text'])
+        score = analysis.sentimentAnalysis(input=article['text'])
         
         results = {'Header' : article['header'],
                 'Date' : article['date'],
@@ -19,7 +20,7 @@ def getSentimentAnalysisResults(articles):
 
     return Sresults
 
-articles = getArticles(pair_name='AAPL')
+articles = getArticles('AAPL')
 
 results = getSentimentAnalysisResults(articles=articles)
 

@@ -13,6 +13,7 @@ class GetNews:
         'FETCH FROM TWO DIFFIRENT SOURCES AND THEN ANALYSE IT.'
         self.pair = pair
     def fetchTW(self):
+
         links = getDynamicElement(self.pair)
 
         session = QSession(headers=headers , cookies=cookies).createSession()
