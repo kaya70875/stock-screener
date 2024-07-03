@@ -1,5 +1,7 @@
 from crawlers.get_news import GetNews
 from analysis.sentiment_analysis import Analysis
+from data.database import insertResults
+
 import threading
 
 def getArticles(pair_name , results):
@@ -53,8 +55,7 @@ def main():
     startFetchingProcess()
     startAnalyzingProcess()
 
-    for result in analyze_results:
-        print(f'Results : {result}')
+    insertResults(analyze_results)
 
 if __name__ == '__main__':
     main()
