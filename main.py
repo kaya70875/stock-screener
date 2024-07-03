@@ -1,6 +1,5 @@
 from crawlers.get_news import GetNews
 from analysis.sentiment_analysis import Analysis
-
 import threading
 
 def getArticles(pair_name , results):
@@ -8,38 +7,54 @@ def getArticles(pair_name , results):
     articles = news.fetchTW(max_news=7)
     results.append(articles)
 
-def getSentimentAnalysisResults(articles):
-    Sresults = []
+def getSentimentAnalysisResults(articles , results):
     analysis = Analysis()
-    for article in articles:
-        for element in article:
-            score = analysis.sentimentAnalysis(input=element['header'] + element['text'])
+    for element in articles:
+        score = analysis.sentimentAnalysis(input=element['header'] + element['text'])
             
-            results = {
+        Sresults = {
                     'Company' : element['company'],
                     'Header' : element['header'],
                     'Date' : element['date'],
                     'Label' : score}
 
-            Sresults.append(results)
+        results.append(Sresults)
 
-    return Sresults
 
-stocks = ['AAPL' , 'TSLA']
+stocks = ['AAPL' , 'TSLA' , 'ARCLK' , 'MSFT']
+
 threads = []
 thread_results = []
 
-all_articles = []
+analyze_threads = []
+analyze_results = []
 
-for symbol in stocks:
-    thread = threading.Thread(target=getArticles , args=(symbol, thread_results))
-    threads.append(thread)
-    thread.start()
+def startFetchingProcess():
+    
+    for symbol in stocks:
+        thread = threading.Thread(target=getArticles , args=(symbol, thread_results))
+        threads.append(thread)
+        thread.start()
 
-for thread in threads:
-    thread.join()
+    for thread in threads:
+        thread.join()
 
-results = getSentimentAnalysisResults(articles=thread_results)
+def startAnalyzingProcess():
+    for article in thread_results:
+        thread = threading.Thread(target=getSentimentAnalysisResults , args=(article , analyze_results))
+        analyze_threads.append(thread)
+        thread.start()
 
-for result in results:
-    print(f'Results : {result}')
+    for thread in analyze_threads:
+        thread.join()
+
+def main():
+
+    startFetchingProcess()
+    startAnalyzingProcess()
+
+    for result in analyze_results:
+        print(f'Results : {result}')
+
+if __name__ == '__main__':
+    main()
