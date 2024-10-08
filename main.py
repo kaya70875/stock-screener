@@ -23,7 +23,7 @@ def getSentimentAnalysisResults(articles , results):
         results.append(Sresults)
 
 
-stocks = ['AAPL' , 'TSLA' , 'ARCLK' , 'MSFT']
+stocks = ['ARCLK' , 'LOGO' , 'OYAKC']
 
 threads = []
 thread_results = []
@@ -50,12 +50,17 @@ def startAnalyzingProcess():
     for thread in analyze_threads:
         thread.join()
 
+def show_results():
+    for results in analyze_results:
+        print(f'Results : {results}')
+
 def main():
 
     startFetchingProcess()
     startAnalyzingProcess()
 
-    insertResults(analyze_results)
+    show_results()
+    #insertResults(analyze_results)
 
 if __name__ == '__main__':
     main()
